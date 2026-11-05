@@ -2,11 +2,15 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source = readFileSync(new URL('../scripts/voice_chat.gd',import.meta.url),'utf8').match(/const VOICE_JS := """([\s\S]*?)"""/)[1];
-let stopped = 0, removed = 0, closed = 0, cancelled = 0, contextClosed = 0;
-const window = {speechSynthesis:{cancel(){cancelled++;}}};
-const context = vm.createContext({window,navigator:{mediaDevices:{}},console});
+let stopped = 0, removed = 0, closed = 0, cancelled = 0, contextClosed = 0, spoken = null;
+const window = {speechSynthesis:{cancel(){cancelled++;},speak(utterance){spoken=utterance;}}};
+class FakeUtterance { constructor(text){ this.text=text; this.lang=''; this.rate=0; this.pitch=0; this.volume=0; } }
+const context = vm.createContext({window,navigator:{mediaDevices:{}},SpeechSynthesisUtterance:FakeUtterance,console});
 vm.runInContext(source,context);
 const state = window.__bidVoice;
+window.bidVoiceSpeak('헬륨 테스트');
+assert.equal(spoken.text,'헬륨 테스트'); assert.equal(spoken.lang,'ko-KR');
+assert.equal(spoken.pitch,2.0); assert.equal(spoken.rate,1.22); assert.equal(spoken.volume,0.88);
 state.pcs[2] = {audio:{remove(){removed++;}},close(){closed++;}};
 state.rawStream = {getTracks:()=>[{stop(){stopped++;}}]};
 state.stream = {getTracks:()=>[{stop(){stopped++;}}]};

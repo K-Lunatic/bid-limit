@@ -108,7 +108,7 @@ const VOICE_JS := """
   window.bidVoiceSpeak = (text) => {
     if (!('speechSynthesis' in window)) return;
     const utterance = new SpeechSynthesisUtterance(String(text).slice(0, 80));
-    utterance.lang = 'ko-KR'; utterance.rate = 1.16; utterance.pitch = 1.65; utterance.volume = 0.82;
+    utterance.lang = 'ko-KR'; utterance.rate = 1.22; utterance.pitch = 2.0; utterance.volume = 0.88;
     window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance);
   };
   window.bidVoiceReceive = async (from, message) => {
