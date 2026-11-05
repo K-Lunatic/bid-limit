@@ -1,0 +1,16 @@
+{
+  "source": "sock-puppet-pixel-reference-v2.png",
+  "finish": "pixel",
+  "canvas": [96, 128],
+  "filter": "nearest",
+  "physics_fps": 60,
+  "authored_frames": 8,
+  "actions": {
+    "idle": [0, 1, 0, 1],
+    "walk": [0, 1, 0, 1],
+    "bid": [5, 6, 5, 6],
+    "hurt": [0, 5, 0],
+    "victory": [5, 6]
+  },
+  "note": "Movement and squash/tilt are evaluated at 60 Hz; authored pixels are never linearly filtered."
+}

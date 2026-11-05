@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "art_source": "imagegen_reference_edit",
+  "source_sheet": "res://assets/sprites/sock_puppet/parts/sock-puppet-parts-sheet-v1.png",
+  "logical_canvas": [96, 128],
+  "anchor_contract": "res://ART_SCALE_AND_PARTS.md",
+  "parts": {
+    "mouth_closed": "res://assets/sprites/sock_puppet/parts/v1/mouth_closed.png",
+    "mouth_open": "res://assets/sprites/sock_puppet/parts/v1/mouth_open.png",
+    "mouth_wide": "res://assets/sprites/sock_puppet/parts/v1/mouth_wide.png",
+    "eyes_buttons": "res://assets/sprites/sock_puppet/parts/v1/eyes_buttons.png",
+    "hair_blue": "res://assets/sprites/sock_puppet/parts/v1/hair_blue.png",
+    "glasses_round": "res://assets/sprites/sock_puppet/parts/v1/glasses_round.png",
+    "cap_red": "res://assets/sprites/sock_puppet/parts/v1/cap_red.png",
+    "badge_gold": "res://assets/sprites/sock_puppet/parts/v1/badge_gold.png"
+  },
+  "keyed_runtime_parts": "res://assets/sprites/sock_puppet/parts/v2/",
+  "runtime": {
+    "status": "pixel_alpha_qc_pass_runtime_wiring_pending",
+    "fallback": "res://scripts/sock_puppet_parts_2d.gd",
+    "note": "The current 8-frame body already contains face and hair. Replace the body master with a body-only sheet before enabling overlays to avoid double-drawing."
+  }
+}

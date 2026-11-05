@@ -1,0 +1,20 @@
+{
+  "art_source": "host_image",
+  "seed": 811,
+  "noise_frequency": 0.007,
+  "world_bounds": [90, 3030],
+  "floor_y": 520,
+  "reserved_x": [[120, 700], [1110, 1790], [2510, 3030]],
+  "decoration_slots": [790, 975, 1910, 2110, 2330],
+  "props": [
+    {"id": "portrait", "cell": [0, 0], "anchor": [48, 48], "y": 190},
+    {"id": "sconce", "cell": [1, 0], "anchor": [48, 48], "y": 340},
+    {"id": "trunks", "cell": [0, 1], "anchor": [48, 92], "y": 520},
+    {"id": "plant", "cell": [1, 1], "anchor": [48, 92], "y": 520}
+  ],
+  "routes": [
+    {"from": "appraisal", "to": "auction", "x": [320, 1450]},
+    {"from": "auction", "to": "black_market", "x": [1450, 2750]}
+  ],
+  "collision": "decorations are behind the walk lane; continuous floor, no blocking furniture"
+}

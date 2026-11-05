@@ -1,0 +1,6 @@
+.vercel
+.env*
+.godot/
+.codex-ppt/
+.DS_Store
+tools/pixelfx/

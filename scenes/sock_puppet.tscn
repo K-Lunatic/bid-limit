@@ -1,0 +1,208 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sock_puppet_2d.gd" id="1_71scu"]
+[ext_resource type="Shader" path="res://shaders/sock_tint.gdshader" id="2_5sjac"]
+[ext_resource type="Texture2D" path="res://assets/sprites/sock_puppet/cozy_v3/frames/05.png" id="3_tr0cs"]
+[ext_resource type="Texture2D" path="res://assets/sprites/sock_puppet/cozy_v3/frames/06.png" id="4_rgixc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/sock_puppet/cozy_v3/frames/00.png" id="5_g28gk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/sock_puppet/cozy_v3/frames/01.png" id="6_2ffm8"]
+[ext_resource type="Script" path="res://scripts/sock_puppet_parts_2d.gd" id="7_q3waq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wk1cg"]
+shader = ExtResource("2_5sjac")
+shader_parameter/sock_tint = Color(0.8509804, 0.35686275, 0.40784314, 1)
+shader_parameter/hair_tint = Color(0.20784314, 0.654902, 0.84313726, 1)
+shader_parameter/room_light = null
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_txruy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rgixc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rgixc")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rgixc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rgixc")
+}],
+"loop": 0,
+"name": &"bid",
+"speed": 7.0
+}, {
+	"frames": [{
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("5_g28gk")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}],
+	"loop": 0,
+	"name": &"coin",
+	"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_g28gk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_g28gk")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("4_rgixc")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}],
+	"loop": 0,
+	"name": &"steal",
+	"speed": 9.0
+}, {
+	"frames": [{
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}],
+	"loop": 0,
+	"name": &"turn",
+	"speed": 12.0
+}, {
+	"frames": [{
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("5_g28gk")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+}],
+"loop": 1,
+"name": &"idle",
+	"speed": 2.2
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tr0cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rgixc")
+}],
+"loop": 1,
+"name": &"victory",
+"speed": 6.0
+}, {
+"frames": [{
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("4_rgixc")
+}],
+"loop": 1,
+"name": &"waiting",
+	"speed": 2.5
+}, {
+"frames": [{
+"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("3_tr0cs")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("6_2ffm8")
+	}, {
+		"duration": 1.0,
+		"texture": ExtResource("4_rgixc")
+}],
+"loop": 1,
+"name": &"walk",
+	"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("6_2ffm8")}, {"duration": 1.0, "texture": ExtResource("5_g28gk")}, {"duration": 1.0, "texture": ExtResource("6_2ffm8")}, {"duration": 1.0, "texture": ExtResource("4_rgixc")}],
+"loop": 1,
+"name": &"talk",
+"speed": 7.0
+}]
+
+[node name="SockPuppet" type="CharacterBody2D" unique_id=226157593]
+script = ExtResource("1_71scu")
+
+[node name="Body" type="AnimatedSprite2D" parent="." unique_id=310436466]
+texture_filter = 1
+material = SubResource("ShaderMaterial_wk1cg")
+position = Vector2(0, -68)
+scale = Vector2(1.4285715, 1.4285715)
+sprite_frames = SubResource("SpriteFrames_txruy")
+animation = &"idle"
+
+[node name="Parts" type="Node2D" parent="." unique_id=1576193938]
+z_index = 2
+position = Vector2(0, -68)
+scale = Vector2(1.4285715, 1.4285715)
+script = ExtResource("7_q3waq")
+integrated_base = true

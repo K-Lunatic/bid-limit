@@ -1,0 +1,64 @@
+import assert from "node:assert/strict";
+import { createSignalingServer } from "./server.mjs";
+
+let clock = Date.now();
+const server = createSignalingServer({ now: () => clock });
+await new Promise(resolve => server.listen({ port: 0, host: "127.0.0.1" }, resolve));
+const base = `http://127.0.0.1:${server.address().port}`;
+const request = (path, options = {}) => fetch(`${base}${path}`, { headers: { "content-type": "application/json", ...(options.headers ?? {}) }, ...options });
+const created = await request("/rooms", { method: "POST", body: JSON.stringify({ name: "비밀 경매", private: true, password: "1234" }) });
+assert.equal(created.status, 201);
+const host = await created.json();
+assert.equal((await request(`/rooms/${host.room.id}/messages?peer=999`)).status, 401);
+assert.equal((await request(`/rooms/${host.room.id}/signal?peer=999`, { method: "POST", body: JSON.stringify({ to: 1, message: { type: "offer", sdp: "test" } }) })).status, 401);
+assert.equal((await request(`/rooms/${host.room.id}/messages?peer=1`)).status, 401);
+const listed = await (await request("/rooms")).json();
+assert.equal(listed.rooms.some(room => room.id === host.room.id && room.private === true), true);
+assert.equal((await request(`/rooms/${host.room.id}/join`, { method: "POST", body: JSON.stringify({ password: "wrong" }) })).status, 401);
+const joined = await (await request(`/rooms/${host.room.id}/join`, { method: "POST", body: JSON.stringify({ password: "1234" }) })).json();
+assert.equal(joined.peerId, 2);
+const third = await (await request(`/rooms/${host.room.id}/join`, { method: "POST", body: JSON.stringify({ password: "1234" }) })).json();
+const fourth = await (await request(`/rooms/${host.room.id}/join`, { method: "POST", body: JSON.stringify({ password: "1234" }) })).json();
+assert.equal(fourth.peerId, 4);
+for (const [peer, expected] of [[host, [2, 3, 4]], [joined, [3, 4]], [third, [4]]]) {
+	const messages = await (await request(`/rooms/${host.room.id}/messages?peer=${peer.peerId}`, { headers: { "x-room-token": peer.token } })).json();
+	assert.deepEqual(messages.messages.map(message => message.peerId), expected);
+}
+assert.equal((await request(`/rooms/${host.room.id}/join`, { method: "POST", body: JSON.stringify({ password: "1234" }) })).status, 409);
+await request(`/rooms/${host.room.id}/signal?peer=1`, { method: "POST", headers: { "x-room-token": host.token }, body: JSON.stringify({ to: 2, message: { type: "offer", sdp: "test", from: 3 } }) });
+const inbox = await (await request(`/rooms/${host.room.id}/messages?peer=2`, { headers: { "x-room-token": joined.token } })).json();
+assert.equal(inbox.messages.at(-1).type, "offer");
+assert.equal(inbox.messages.at(-1).from, 1);
+for (const type of ["voice-offer", "voice-answer", "voice-candidate"]) {
+	const result = await request(`/rooms/${host.room.id}/signal?peer=1`, { method: "POST", headers: { "x-room-token": host.token }, body: JSON.stringify({ to: 2, message: { type, from: 3, sdp: { type: "offer", sdp: "test" } } }) });
+	assert.equal(result.status, 202);
+	const voiceInbox = await (await request(`/rooms/${host.room.id}/messages?peer=2`, { headers: { "x-room-token": joined.token } })).json();
+	assert.equal(voiceInbox.messages.at(-1).type, type);
+	assert.equal(voiceInbox.messages.at(-1).from, 1);
+}
+assert.equal((await request(`/rooms/${host.room.id}/signal?peer=2`, { method: "POST", headers: { "x-room-token": joined.token }, body: JSON.stringify({ to: 1, message: { type: "peer_leave", peerId: 3 } }) })).status, 400);
+const registered = await (await request("/auth/register", { method: "POST", body: JSON.stringify({ username: "sock_user", password: "correct-horse" }) })).json();
+assert.ok(registered.uid);
+const exported = await (await request("/profiles/export", { method: "POST", headers: { authorization: `Bearer ${registered.token}` }, body: JSON.stringify({ profile: { sock: "e15a67", hair: "35a7d7", cash: 500 } }) })).json();
+assert.match(exported.code, /^BID1\./);
+const imported = await (await request("/profiles/import", { method: "POST", headers: { authorization: `Bearer ${registered.token}` }, body: JSON.stringify({ code: exported.code }) })).json();
+assert.equal(imported.profile.cash, 500);
+assert.equal((await request("/profiles/import", { method: "POST", headers: { authorization: `Bearer ${registered.token}` }, body: JSON.stringify({ code: "BID1.invalid.invalid.invalid" }) })).status, 400);
+const left = await (await request(`/rooms/${host.room.id}/leave?peer=1`, { method: "POST", headers: { "x-room-token": host.token } })).json();
+assert.equal(left.roomClosed, true);
+assert.equal((await (await request("/rooms")).json()).rooms.some(room => room.id === host.room.id), false);
+const liveHost = await (await request("/rooms", { method: "POST", body: JSON.stringify({ name: "연결 확인" }) })).json();
+const idlePeer = await (await request(`/rooms/${liveHost.room.id}/join`, { method: "POST", body: "{}" })).json();
+clock += 50_000;
+await request(`/rooms/${liveHost.room.id}/messages?peer=1`, { headers: { "x-room-token": liveHost.token } });
+clock += 41_000;
+const liveList = await (await request("/rooms")).json();
+assert.equal(liveList.rooms.find(room => room.id === liveHost.room.id).players, 1);
+const notices = await (await request(`/rooms/${liveHost.room.id}/messages?peer=1`, { headers: { "x-room-token": liveHost.token } })).json();
+assert.equal(notices.messages.some(message => message.type === "peer_leave" && message.peerId === idlePeer.peerId), true);
+clock += 91_000;
+assert.equal((await (await request("/rooms")).json()).rooms.some(room => room.id === liveHost.room.id), false);
+server.closeAllConnections();
+await new Promise(resolve => server.close(resolve));
+console.log("Signaling smoke test: PASS");
+process.exit(0);

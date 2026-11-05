@@ -1,0 +1,11 @@
+{
+  "art_source": "host_image",
+  "runtime_size": [48, 28],
+  "anchor_px": [24, 25],
+  "attach_to": "NEAR_EYE_PIXELS[frame]",
+  "offset_px": [-7, -7],
+  "facing": "right; mirror the whole attachment with the actor",
+  "sampling": "nearest",
+  "alpha": "native RGBA thresholded to binary for runtime edges",
+  "back_region": [0, 22, 48, 6]
+}

@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/auction_hall_2d.gd" id="1_14lca"]
+[ext_resource type="Script" path="res://scripts/auction_hall_layer_2d.gd" id="2_3b68b"]
+[ext_resource type="PackedScene" path="res://scenes/sock_puppet.tscn" id="3_rxl1o"]
+[ext_resource type="Script" path="res://scripts/sock_puppet_2d.gd" id="4_k5dbl"]
+[ext_resource type="Script" path="res://scripts/sacred_hand_2d.gd" id="5_i4gw3"]
+[ext_resource type="Texture2D" path="res://assets/npc/mending-glove-v2.png" id="6_uyeto"]
+[ext_resource type="Script" path="res://scripts/lot_monitor_2d.gd" id="7_f8811"]
+[ext_resource type="Script" path="res://scripts/auction_lot_2d.gd" id="8_e5nmq"]
+
+[node name="World" type="Node2D" unique_id=1654303815]
+
+[node name="Seats" type="Node2D" parent="." unique_id=2044733551]
+
+[node name="Seat1" type="Marker2D" parent="Seats" unique_id=933134817]
+position = Vector2(1195, 526)
+
+[node name="Seat2" type="Marker2D" parent="Seats" unique_id=1404690872]
+position = Vector2(1365, 526)
+
+[node name="Seat3" type="Marker2D" parent="Seats" unique_id=1204967064]
+position = Vector2(1535, 526)
+
+[node name="Seat4" type="Marker2D" parent="Seats" unique_id=914687225]
+position = Vector2(1705, 526)
+
+[node name="AuctionHall" type="Node2D" parent="." unique_id=248174603]
+script = ExtResource("1_14lca")
+
+[node name="Backdrop" type="Node2D" parent="AuctionHall" unique_id=1665288619]
+z_index = -20
+script = ExtResource("2_3b68b")
+
+[node name="SeatLayer" type="Node2D" parent="AuctionHall" unique_id=1094059255]
+script = ExtResource("2_3b68b")
+layer_kind = 1
+decoration_seed = 848
+seat_markers = Array[NodePath]([NodePath("../../Seats/Seat1"), NodePath("../../Seats/Seat2"), NodePath("../../Seats/Seat3"), NodePath("../../Seats/Seat4")])
+
+[node name="Decorations" type="Node2D" parent="AuctionHall" unique_id=804543571]
+z_index = -10
+script = ExtResource("2_3b68b")
+layer_kind = 2
+decoration_seed = 885
+
+[node name="Appraiser" type="CharacterBody2D" parent="." unique_id=226157593 instance=ExtResource("3_rxl1o")]
+z_index = 1
+position = Vector2(320, 520)
+script = ExtResource("4_k5dbl")
+sock_color = Color(0.8352941, 0.70980394, 0.5529412, 1)
+hair_color = Color(0.7254902, 0.6901961, 0.6313726, 1)
+puppet_name = "감정사 보빈"
+chosen_accessory = 1
+
+[node name="Merchant" type="CharacterBody2D" parent="." unique_id=1093310452 instance=ExtResource("3_rxl1o")]
+z_index = 1
+position = Vector2(2750, 520)
+script = ExtResource("4_k5dbl")
+sock_color = Color(0.2509804, 0.5254902, 0.46666667, 1)
+hair_color = Color(0.83137256, 0.6784314, 0.40784314, 1)
+puppet_name = "상인 단추 · 행동표 상점"
+chosen_hair_style = 1
+chosen_accessory = 1
+
+[node name="Auctioneer" type="Node2D" parent="." unique_id=101282880]
+z_index = 3
+position = Vector2(1450, 355)
+script = ExtResource("5_i4gw3")
+
+[node name="Sprite" type="Sprite2D" parent="Auctioneer" unique_id=26531300]
+modulate = Color(0.94, 0.88, 0.78, 1)
+texture_filter = 1
+scale = Vector2(1.4285715, 1.4285715)
+texture = ExtResource("6_uyeto")
+
+[node name="LotMonitor" type="Node2D" parent="." unique_id=1117715639]
+z_index = 6
+position = Vector2(1450, 205)
+script = ExtResource("7_f8811")
+
+[node name="LotItem" type="Node2D" parent="." unique_id=1737780890]
+z_index = 4
+position = Vector2(1450, 260)
+script = ExtResource("8_e5nmq")
+
+[node name="GameCamera" type="Camera2D" parent="." unique_id=1422731514]
+position = Vector2(1450, 340)
+zoom = Vector2(0.3, 0.3)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
