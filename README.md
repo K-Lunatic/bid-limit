@@ -4,6 +4,18 @@
 
 프로젝트 소개와 팀 소식은 [roomcon.team](https://roomcon.team)에서 확인할 수 있다. 실행 가능한 웹 빌드는 [BID! LIMIT](https://bid-limit.vercel.app/)에서 제공한다.
 
+## 혼자서 한 판 보기
+
+[브라우저에서 게임 열기](https://bid-limit.vercel.app/) · [Roomcon](https://roomcon.team/)
+
+1. 타이틀에서 오프라인 연습을 선택합니다.
+2. 경매장에 들어가 빈 좌석에 앉고, 나머지 좌석을 AI로 채워 시작합니다.
+3. 내 차례에 입찰 카드를 제출하고 라운드의 낙찰 결과를 확인합니다.
+
+![BID! LIMIT 경매장 화면](assets/art-direction/cozy-v2/review/gameplay.png)
+
+친구와 방을 열면 신호 서버가 브라우저 간 연결을 돕고, 플레이 중 상태는 WebRTC로 참가자끼리 주고받습니다. [연결과 게임 처리 구조](ARCHITECTURE.md)
+
 ## 실행
 
 Godot 4에서 `project.godot`를 열고 실행한다. 방을 생성하면 본인만 대기실에 들어간다. 방장은 시작 시 빈자리를 AI로 채울지 선택한다. 오프라인 연습도 같은 대기실 흐름을 쓴다.
